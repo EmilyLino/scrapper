@@ -4,15 +4,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Course, CourseDocument } from './schemas/course.schame';
 import { GenerateParamsDTO } from './dto/generateParams.dto';
 import { CreateCourseDTO } from './dto/create-course.dto';
-import { CourseInterface } from './interfaces/course.interface';
 import puppeteer = require('puppeteer');
 import { ScrapperAlgorithm } from './algorithm/main';
-
-export const waitLoad: puppeteer.WaitForOptions = { waitUntil: 'networkidle2' };
-export const k = 10 ** 3;
-
-export const courseraURL: string = 'https://es.coursera.org/search';
-export const domestikaURL: string = 'https://www.domestika.org/es';
 
 @Injectable()
 export class ScrapperService {
@@ -32,8 +25,7 @@ export class ScrapperService {
   } */
 
   async scrapCourses(queryParams: GenerateParamsDTO) {
-    const registry = await this.scrapperAlgorithm.executeAlgorithm(queryParams);
-    return registry;
+    return await this.scrapperAlgorithm.executeAlgorithm(queryParams);
   }
 
   async randomCrawler(generateParamsDTO: GenerateParamsDTO) {

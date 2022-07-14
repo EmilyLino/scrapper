@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Query,
-  Res,
-  HttpStatus,
-  Body,
-} from '@nestjs/common';
-import { get } from 'http';
+import { Controller, Get, Post, Query, Body } from '@nestjs/common';
 import { ApiResponse } from './dto/api-respode.dto';
 import { CreateCourseDTO } from './dto/create-course.dto';
 import { GenerateParamsDTO } from './dto/generateParams.dto';
@@ -19,7 +10,7 @@ export class ScrapperController {
   constructor(private readonly scrapperService: ScrapperService) {}
 
   @Get()
-  get(@Query() params?: String): Promise<Course[]> {
+  get(): Promise<Course[]> {
     return this.scrapperService.findAll();
   }
 

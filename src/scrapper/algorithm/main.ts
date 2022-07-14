@@ -2,19 +2,16 @@ import { Injectable } from '@nestjs/common';
 import puppeteer = require('puppeteer');
 import { GenerateParamsDTO } from '../dto/generateParams.dto';
 import {
-  scrapCourseraDetails,
-  scrapCourseraLinks,
+  extractCourseraDetails,
+  extractCourseraLinks,
 } from './extract-course-detail-coursera';
 import {
-  scrapDomestiakDetails,
-  scrapDomestikaLinks,
+  extractDkCourseDetails,
+  extractDomestikaLinks,
 } from './extract-course-details';
-
-export const waitLoad: puppeteer.WaitForOptions = { waitUntil: 'networkidle2' };
-export const k = 10 ** 3;
-
-export const courseraURL: string = 'https://es.coursera.org/search';
-export const domestikaURL: string = 'https://www.domestika.org/es';
+const waitLoad: puppeteer.WaitForOptions = { waitUntil: 'networkidle2' };
+const courseraURL = 'https://es.coursera.org/search';
+const domestikaURL = 'https://www.domestika.org/es';
 
 @Injectable()
 export class ScrapperAlgorithm {
@@ -28,8 +25,8 @@ export class ScrapperAlgorithm {
     url.searchParams.set('query', queryParams.coursename);
     await domestikaPage.goto(url.toString(), waitLoad);
 
-    const links = await scrapDomestikaLinks(domestikaPage);
-    registry[domestikaURL] = await scrapDomestiakDetails(links, browser);
+    const links = await extractDomestikaLinks(domestikaPage);
+    registry[domestikaURL] = await extractDkCourseDetails(links, browser);
     domestikaPage.close();
 
     const courseraPage = await browser.newPage();
@@ -37,8 +34,8 @@ export class ScrapperAlgorithm {
     urlCoursera.searchParams.set('query', queryParams.coursename);
     await courseraPage.goto(urlCoursera.toString(), waitLoad);
 
-    const linksC = await scrapCourseraLinks(courseraPage);
-    registry[courseraURL] = await scrapCourseraDetails(linksC, browser);
+    const linksC = await extractCourseraLinks(courseraPage);
+    registry[courseraURL] = await extractCourseraDetails(linksC, browser);
     courseraPage.close();
 
     browser.close();

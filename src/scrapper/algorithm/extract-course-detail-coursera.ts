@@ -1,7 +1,7 @@
 import puppeteer = require('puppeteer');
 import { CourseInterface } from '../interfaces/course.interface';
 
-export async function scrapCourseraLinks(
+export async function extractCourseraLinks(
   page: puppeteer.Page,
 ): Promise<CourseInterface[]> {
   const coursesFound = await page.$('.rc-NoResultsSearchPage');
@@ -28,13 +28,13 @@ export async function scrapCourseraLinks(
   return registry;
 }
 
-export async function scrapCourseraDetails(
+export async function extractCourseraDetails(
   courseDetails: Array<CourseInterface>,
   browser: puppeteer.Browser,
 ) {
   const courses = [];
   while (courseDetails.length > 0) {
-    let currentCourse: CourseInterface =
+    const currentCourse: CourseInterface =
       courseDetails[courseDetails.length - 1];
     console.log('current URL:', currentCourse.link);
 
